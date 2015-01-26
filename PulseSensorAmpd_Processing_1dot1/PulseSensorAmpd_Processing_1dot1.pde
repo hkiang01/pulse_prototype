@@ -33,6 +33,8 @@ Table table;
 Table table_single;
 JSONArray values;
 XML xml;
+XML xml_single;
+int id_counter;
 
 void setup() {
   size(700, 600);  // Stage size
@@ -80,19 +82,26 @@ void setup() {
   values.setJSONObject(0, header_row);
   saveJSONArray(values, "data/bpm_data.json");
   
-  xml = loadXML("data/bpm_data.xml");
-  //XML xml_inner_element = xml.getChild("datapoint");
-  //println(xml_inner_element.getInt("id"));
-  //XML hour_element = xml_inner_element.getChild("hour");
-  //println(hour_element.getIntContent());
+  // PREP (CLEAR) XML CHARTS
+  xml = loadXML("web/bpm_data.xml");
+  xml_single = loadXML("web/bpm_data_single.xml");
   XML[] children = xml.getChildren("datapoint");
-  
+  XML[] children_single = xml_single.getChildren("datapoint");
   for(int i = 0; i < children.length; i++)
   {
     XML element = xml.getChild("datapoint");
     xml.removeChild(element);
   }
-  saveXML(xml, "data/bpm_data.xml");
+  for(int i = 0; i < children_single.length; i++)
+  {
+    XML element = xml_single.getChild("datapoint");
+    xml_single.removeChild(element); 
+  }
+  saveXML(xml, "web/bpm_data.xml");
+  saveXML(xml_single, "web/bpm_data_single.xml");
+  // PREP (CLEAR) XML CHARTS
+  
+  
   println("setup() complete");
 
 }
@@ -189,16 +198,18 @@ void draw() {
   }
   text(threshold, 600, 100);
   
+  int id_num = id_counter;
+  int hour_num = hour();
+  int minute_num = minute();
+  int second_num = second();
+  int millis_num = millis();
+/* 
 // SAVE BPM IN "data/bpm_data.csv"
   table = loadTable("data/bpm_data.csv", "header");
   table_single = loadTable("data/bpm_data_single.csv", "header");
   TableRow newRow = table.addRow();
   TableRow newSingleRow = table_single.getRow(0);
   int id_num = table.getRowCount() - 1;
-  int hour_num = hour();
-  int minute_num = minute();
-  int second_num = second();
-  int millis_num = millis();
   newRow.setInt("id", id_num );
   newRow.setInt("hour", hour_num);
   newRow.setInt("minute", minute_num);
@@ -225,6 +236,7 @@ void draw() {
   values.setJSONObject(id_num, bpm_obj);
   saveJSONArray(values, "data/bpm_data.json");
   saveJSONObject(bpm_obj, "data/bpm_data_single.json");
+*/
   
  /*
   xml = loadXML("data/bpm_data.xml");
@@ -234,25 +246,40 @@ void draw() {
   println(hour_element.getIntContent());
   */
   
-  xml = loadXML("data/bpm_data.xml");
+  xml = loadXML("web/bpm_data.xml");
+  //xml_single = loadXML("web/bpm_data_single.xml");
   XML newChild = xml.addChild("datapoint");
+  //XML newChildSingle = xml.addChild("datapoint");
   newChild.setInt("id", id_num);
+  //newChildSingle.setInt("id", id_num);
   XML hour_elem = newChild.addChild("hour");
+  //XML hour_elem_single = newChildSingle.addChild("hour");
   hour_elem.setContent(str(hour_num));
+  //hour_elem_single.setContent(str(hour_num));
   XML minute_elem = newChild.addChild("minute");
+  //XML minute_elem_single = newChildSingle.addChild("minute");
   minute_elem.setContent(str(minute_num));
+  //minute_elem_single.setContent(str(minute_num));
   XML second_elem = newChild.addChild("second");
+  //XML second_elem_single = newChildSingle.addChild("second");
   second_elem.setContent(str(second_num));
+  //second_elem_single.setContent(str(second_num));
   XML ms_elem = newChild.addChild("ms");
+  //XML ms_elem_single = newChildSingle.addChild("ms");
   ms_elem.setContent(str(millis_num));
+  //ms_elem_single.setContent(str(millis_num));
   XML BPM_elem = newChild.addChild("BPM");
+  //XML BPM_elem_single = newChildSingle.addChild("BPM");
   BPM_elem.setContent(str(BPM));
-  saveXML(xml, "data/bpm_data.xml");
+  //BPM_elem_single.setContent(str(BPM));
+  saveXML(xml, "web/bpm_data.xml");
+  //saveXML(xml_single, "web/bpm_data_single.xml");
   
 //  DO THE SCROLLBAR THINGS
   scaleBar.update (mouseX, mouseY);
   scaleBar.display();
   
+  id_counter++;
 //   
 }  //end of draw loop
 

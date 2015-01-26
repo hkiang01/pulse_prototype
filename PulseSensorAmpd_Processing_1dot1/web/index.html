@@ -3,51 +3,52 @@
 <head>
 	<meta content=?te
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
- <!--<script>
-  	//http://www.think2loud.com/224-reading-xml-with-jquery/
-      $(document).ready(function(){
-
-      		$.ajax({
-      				type: "GET",
-      				url: "../data/bpm_data.xml",
-      				dataType: "xml",
-      				success: function(xml) {
-
-      					$(xml).find('datapoint').each(function(){
-      						var id = $(this).attr('id');
-      						var hour = $(this).find('hour').text();
-      						var minute = $(this).find('minute').text();
-      						var second = $(this).find('second').text();
-      						var millis = $(this).find('ms').text();
-      						var BPM = $(this).find('BPM').text();
-      						console.log("id: " + id + ", BPM: " + BPM + ", hour: " + hour + ", minute: " + ", second: " + ", ms: " + "millis: " + millis);
-      					});
-      				}
-      		});
-
-      });
-
-  </script> -->
   <script>
-  	// https://stackoverflow.com/questions/26571975/reading-an-external-xml-file-with-jquery
-  	//https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
-  	if(window.XMLHttpRequest)
-  	{
-  		xmlhttp = new XMLHttpRequest();
 
-  	}
-  	else
-  	{
-  		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-  	}
-  	xmlhttp.open("GET", "bpm_data.xml", false); //false for synchronous, true for asynchronous
-  	xmlhttp.send();
-  	xmlDoc = xmlhttp.responseXML;
-  	var element = xmlDoc.getElementsByTagName("datapoint");
-  	console.log(element); //for some reason this only works on Firefox (tested on 35.0)
+  	window.onload = function() {
+	  	document.getElementById("start_btn").addEventListener("click", start_function());
+
+	  	// https://stackoverflow.com/questions/26571975/reading-an-external-xml-file-with-jquery
+	  	//https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+	  	if(window.XMLHttpRequest)
+	  	{
+	  		xmlhttp = new XMLHttpRequest();
+
+	  	}
+	  	else
+	  	{
+	  		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	  	}
+	  	xmlhttp.open("GET", "bpm_data.xml", false); //false for synchronous, true for asynchronous
+	  	xmlhttp.send();
+	  	xmlDoc = xmlhttp.responseXML;
+	  	var collection = xmlDoc.getElementsByTagName("datapoint");
+	  	console.log(collection); //for some reason this only works on Firefox (tested on 35.0)
+	  	
+	  	for(var i=0; i < collection.length; i++)
+	  	{
+	  		console.log(collection.item(i));
+	  		//console.log(collection.item(i).children);
+	  		console.log("hour: " + collection.item(i).children[0].childNodes[0].data);
+	  		console.log("minute: " + collection.item(i).children[1].childNodes[0].data);
+	  		console.log("second: " + collection.item(i).children[2].childNodes[0].data);
+	  		console.log("ms: " + collection.item(i).children[3].childNodes[0].data);
+	  		console.log("BPM: " + collection.item(i).children[4].childNodes[0].data);
+	   	}
+	   	
+	   	
+
+	   	
+   	};
+
+   	function start_function() {
+   		console.log("start");
+   	}
 
   </script>
 </head>
 <body>
   <p>test</p>
+  <button id="start_btn">Start</button>
+  <button id="stop_btn">Stop</button>
 </body>
