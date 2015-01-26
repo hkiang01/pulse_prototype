@@ -32,6 +32,7 @@ boolean beat = false;    // set when a heart beat is detected, then cleared when
 Table table;
 Table table_single;
 JSONArray values;
+XML xml;
 
 void setup() {
   size(700, 600);  // Stage size
@@ -78,6 +79,21 @@ void setup() {
   JSONObject header_row = new JSONObject();
   values.setJSONObject(0, header_row);
   saveJSONArray(values, "data/bpm_data.json");
+  
+  xml = loadXML("data/bpm_data.xml");
+  //XML xml_inner_element = xml.getChild("datapoint");
+  //println(xml_inner_element.getInt("id"));
+  //XML hour_element = xml_inner_element.getChild("hour");
+  //println(hour_element.getIntContent());
+  XML[] children = xml.getChildren("datapoint");
+  
+  for(int i = 0; i < children.length; i++)
+  {
+    XML element = xml.getChild("datapoint");
+    xml.removeChild(element);
+  }
+  saveXML(xml, "data/bpm_data.xml");
+  println("setup() complete");
 
 }
   
@@ -209,6 +225,29 @@ void draw() {
   values.setJSONObject(id_num, bpm_obj);
   saveJSONArray(values, "data/bpm_data.json");
   saveJSONObject(bpm_obj, "data/bpm_data_single.json");
+  
+ /*
+  xml = loadXML("data/bpm_data.xml");
+  XML xml_inner_element = xml.getChild("datapoint");
+  println(xml_inner_element.getInt("id"));
+  XML hour_element = xml_inner_element.getChild("hour");
+  println(hour_element.getIntContent());
+  */
+  
+  xml = loadXML("data/bpm_data.xml");
+  XML newChild = xml.addChild("datapoint");
+  newChild.setInt("id", id_num);
+  XML hour_elem = newChild.addChild("hour");
+  hour_elem.setContent(str(hour_num));
+  XML minute_elem = newChild.addChild("minute");
+  minute_elem.setContent(str(minute_num));
+  XML second_elem = newChild.addChild("second");
+  second_elem.setContent(str(second_num));
+  XML ms_elem = newChild.addChild("ms");
+  ms_elem.setContent(str(millis_num));
+  XML BPM_elem = newChild.addChild("BPM");
+  BPM_elem.setContent(str(BPM));
+  saveXML(xml, "data/bpm_data.xml");
   
 //  DO THE SCROLLBAR THINGS
   scaleBar.update (mouseX, mouseY);
