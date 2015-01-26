@@ -1,9 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<meta content=?te
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+ <!--<script>
+  	//http://www.think2loud.com/224-reading-xml-with-jquery/
+      $(document).ready(function(){
+
+      		$.ajax({
+      				type: "GET",
+      				url: "../data/bpm_data.xml",
+      				dataType: "xml",
+      				success: function(xml) {
+
+      					$(xml).find('datapoint').each(function(){
+      						var id = $(this).attr('id');
+      						var hour = $(this).find('hour').text();
+      						var minute = $(this).find('minute').text();
+      						var second = $(this).find('second').text();
+      						var millis = $(this).find('ms').text();
+      						var BPM = $(this).find('BPM').text();
+      						console.log("id: " + id + ", BPM: " + BPM + ", hour: " + hour + ", minute: " + ", second: " + ", ms: " + "millis: " + millis);
+      					});
+      				}
+      		});
+
+      });
+
+  </script> -->
   <script>
-      //var bpm_obj = $.getJSON("../data/bpm_data_single.json", function() {console.log("success")});
+  	// https://stackoverflow.com/questions/26571975/reading-an-external-xml-file-with-jquery
+  	//https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+  	if(window.XMLHttpRequest)
+  	{
+  		xmlhttp = new XMLHttpRequest();
+
+  	}
+  	else
+  	{
+  		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+  	}
+  	xmlhttp.open("GET", "bpm_data.xml", false); //false for synchronous, true for asynchronous
+  	xmlhttp.send();
+  	xmlDoc = xmlhttp.responseXML;
+  	var element = xmlDoc.getElementsByTagName("datapoint");
+  	console.log(element); //for some reason this only works on Firefox (tested on 35.0)
 
   </script>
 </head>
