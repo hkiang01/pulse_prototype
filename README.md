@@ -1,5 +1,7 @@
 # pulse_prototype
 SEE:
+http://pulse.ece.illinois.edu/?pg=snp
+
 http://pulsesensor.com/pages/code-and-guide
 
 USES: 
